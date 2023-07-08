@@ -1,8 +1,6 @@
-import { client } from "@/lib/client";
 import { PrismaUsersRepository } from "@/repositories/prisma/prisma-users-repository";
 import { userAlreadyExistsError } from "@/services/errors/user-already-exists-error";
 import { RegisterService } from "@/services/register";
-import { hash } from "bcryptjs";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
