@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
-import { GetResult } from "@prisma/client/runtime";
-import { ICheckInRepository } from "../check-inRepository";
 import { client } from "@/lib/client";
+import { ICheckInRepository } from "../interfaces/check-in-repository";
 
 export class PrismaCheckInRepository implements ICheckInRepository {
 

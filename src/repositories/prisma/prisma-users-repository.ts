@@ -1,7 +1,6 @@
 import { client } from "@/lib/client";
 import { Prisma } from "@prisma/client";
-import { UsersRepository } from "../usersRepository";
-import { GetResult } from "@prisma/client/runtime";
+import { UsersRepository } from "../interfaces/users-repository";
 
 
 export class PrismaUsersRepository implements UsersRepository {

@@ -1,6 +1,5 @@
 import { Prisma, User } from "@prisma/client";
-import { GetResult } from "@prisma/client/runtime";
-import { UsersRepository } from "../usersRepository";
+import { UsersRepository } from "../interfaces/users-repository";
 
 
 export class InMemoryUsersRepository implements UsersRepository {
