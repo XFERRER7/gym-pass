@@ -1,15 +1,20 @@
-import { describe, expect, it, test } from 'vitest'
-import { RegisterService } from './register'
+import { beforeEach, describe, expect, it, test } from 'vitest'
+import { RegisterService } from '../register'
 import { compare, compareSync } from 'bcryptjs'
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
-import { userAlreadyExistsError } from './errors/user-already-exists-error'
+import { userAlreadyExistsError } from '../errors/user-already-exists-error'
+
+let userRepository: InMemoryUsersRepository
+let registerService: RegisterService
 
 describe('Register service', () => {
 
-  it('should be able register user', async () => {
+  beforeEach(() => {
+    userRepository = new InMemoryUsersRepository()
+    registerService = new RegisterService(userRepository)
+  })
 
-    const usersRepository = new InMemoryUsersRepository()
-    const registerService = new RegisterService(usersRepository)
+  it('should be able register user', async () => {
 
     const { user } = await registerService.execute({
       name: 'teste',
@@ -22,9 +27,6 @@ describe('Register service', () => {
   })
 
   it('should hash user password upon registration', async () => {
-
-    const usersRepository = new InMemoryUsersRepository()
-    const registerService = new RegisterService(usersRepository)
 
     const { user } = await registerService.execute({
       name: 'teste',
@@ -40,9 +42,6 @@ describe('Register service', () => {
 
   it('should not be able register with same email twice', async () => {
 
-    const usersRepository = new InMemoryUsersRepository()
-    const registerService = new RegisterService(usersRepository)
-
     const email = 'teste@gmail.com'
 
     await registerService.execute({
@@ -51,13 +50,13 @@ describe('Register service', () => {
       password: '123456'
     })
 
-    await expect(async () => {
-      await registerService.execute({
+    await expect(() =>
+      registerService.execute({
         name: 'teste',
         email,
         password: '123456'
       })
-    }).rejects.toBeInstanceOf(userAlreadyExistsError)
+    ).rejects.toBeInstanceOf(userAlreadyExistsError)
 
   })
 
