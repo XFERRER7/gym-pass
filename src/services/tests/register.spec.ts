@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, test } from 'vitest'
-import { RegisterService } from '../register'
+import { RegisterService } from '../user/register'
 import { compare, compareSync } from 'bcryptjs'
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { userAlreadyExistsError } from '../errors/user-already-exists-error'

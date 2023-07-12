@@ -1,6 +1,6 @@
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { describe, it, beforeEach, expect } from "vitest";
-import { GetUserProfile } from "../get-user-profile";
+import { GetUserProfile } from "../user/get-user-profile";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 let userRepository: InMemoryUsersRepository

@@ -1,8 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { CheckInService } from '../check-in'
+import { CheckInService } from '../check-in/check-in'
 import { InMemoryCheckInRepository } from '@/repositories/in-memory/in-memory-check-in-repository'
 import { InMemoryGymRepository } from '@/repositories/in-memory/in-memory-gym-repository'
 import { Decimal } from '@prisma/client/runtime/library'
+import { MaxDistanceError } from '../errors/max-distance-error'
+import { MaxCheckinsError } from '../errors/max-check-ins-error'
 
 let checkInRepository: InMemoryCheckInRepository
 let gymRepository: InMemoryGymRepository
@@ -10,13 +12,13 @@ let checkInService: CheckInService
 
 describe('Check-in service', () => {
 
-  beforeEach(() => {
+  beforeEach(async () => {
 
     checkInRepository = new InMemoryCheckInRepository()
     gymRepository = new InMemoryGymRepository()
     checkInService = new CheckInService(checkInRepository, gymRepository)
 
-    gymRepository.items.push({
+    await gymRepository.create({
       id: 'gym-01',
       title: 'Ruby gym',
       description: 'Gym description',
@@ -64,7 +66,7 @@ describe('Check-in service', () => {
         userLatitude: -16.7088832,
         userLongitude: -49.2754097
       })
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(MaxCheckinsError)
 
 
   })
@@ -110,7 +112,7 @@ describe('Check-in service', () => {
         userLatitude: -16.6577776,
         userLongitude: -49.1258878
       })
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(MaxDistanceError)
 
   })
 

@@ -1,5 +1,5 @@
 import { PrismaUsersRepository } from "@/repositories/prisma/prisma-users-repository"
-import { RegisterService } from "../register"
+import { RegisterService } from "../user/register"
 
 
 export function makeRegisterService() {
