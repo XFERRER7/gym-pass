@@ -1,9 +1,14 @@
 import { Gym, Prisma } from "@prisma/client";
-import { IGymRepository } from "../interfaces/gym-repository";
+import { IGymRepository, TFinNearbyParams } from "../interfaces/gym-repository";
 import { randomUUID } from "crypto";
+import { GetResult } from "@prisma/client/runtime";
+import { calculateDistance } from "@/utlis/calculate-distance";
 
 
 export class InMemoryGymRepository implements IGymRepository {
+
+  public items: Gym[] = []
+
   async create(data: Prisma.GymCreateInput) {
 
     const gym: Gym = {
@@ -21,8 +26,6 @@ export class InMemoryGymRepository implements IGymRepository {
 
   }
 
-  public items: Gym[] = []
-
   async findById(id: string) {
 
     const gym = this.items.find(item => item.id === id)
@@ -32,6 +35,31 @@ export class InMemoryGymRepository implements IGymRepository {
     }
 
     return gym
+
+  }
+
+  async searchMany(query: string, page: number) {
+
+    return this.items
+      .filter(item => item.title.includes(query))
+      .slice((page - 1) * 20, page * 20)
+
+  }
+
+  async findNearby({ userLatitude, userLongitude }: TFinNearbyParams) {
+
+    return this.items.filter(item => {
+
+      const distance = calculateDistance(
+        { latitude: userLatitude, longitude: userLongitude },
+        { latitude: item.latitude.toNumber(), longitude: item.logitude.toNumber() }
+      )
+
+      console.log(distance)
+
+      return distance < 10
+
+    })
 
   }
 

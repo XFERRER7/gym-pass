@@ -68,7 +68,6 @@ describe('Check-in service', () => {
       })
     ).rejects.toBeInstanceOf(MaxCheckinsError)
 
-
   })
 
   it('should be able to check-in twice in different days', async () => {
