@@ -55,8 +55,6 @@ export class InMemoryGymRepository implements IGymRepository {
         { latitude: item.latitude.toNumber(), longitude: item.logitude.toNumber() }
       )
 
-      console.log(distance)
-
       return distance < 10
 
     })
