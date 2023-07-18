@@ -1,7 +1,7 @@
-import { CheckIn, Prisma } from "@prisma/client";
-import { client } from "@/lib/client";
-import { ICheckInRepository } from "../interfaces/check-in-repository";
-import { GetResult } from "@prisma/client/runtime";
+import { CheckIn, Prisma } from "@prisma/client"
+import { client } from "@/lib/client"
+import { ICheckInRepository } from "../interfaces/check-in-repository"
+import dayjs from "dayjs"
 
 export class PrismaCheckInRepository implements ICheckInRepository {
 
@@ -31,10 +31,16 @@ export class PrismaCheckInRepository implements ICheckInRepository {
   
   async findByUserIdOnDate(userId: string, date: Date) {
     
+    const startOfTheDate = dayjs(date).startOf('date')
+    const endOfTheDate = dayjs(date).endOf('date')
+    
     const checkIn = await client.checkIn.findFirst({
       where: {
         user_id: userId,
-        createdAt: date
+        createdAt: {
+          gte: startOfTheDate.toDate(),
+          lte: endOfTheDate.toDate()
+        }
       }
     })
 
@@ -45,10 +51,12 @@ export class PrismaCheckInRepository implements ICheckInRepository {
     const checkIns = await client.checkIn.findMany({
       where: {
         user_id: userId
-      }
+      },
+      take: 20,
+      skip: (page - 1) * 20
     })
 
-    return checkIns.slice((page - 1) * 20, page * 20)
+    return checkIns
   }
 
   async countByUserId(userId: string) {

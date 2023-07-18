@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 import { UsersRepository } from "../interfaces/users-repository";
 
 
-export class PrismaUsersRepository implements UsersRepository {
+export class PrismaUserRepository implements UsersRepository {
 
   async create(data: Prisma.UserCreateInput) {
 
